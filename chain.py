@@ -38,8 +38,7 @@ def get_model(provider: str = "openai"):
 
 def build_chain(provider: str = "openai"):
     """
-    Construye la Cadena LCEL:
-    prompt | model.with_structured_output(Schema) + .with_retry()
+    Construye la Cadena LCEL: prompt | model.with_structured_output(Schema) + .with_retry()
     """
     model = get_model(provider)
     
@@ -56,8 +55,7 @@ def build_chain(provider: str = "openai"):
 
 async def process_text(text: str, provider: str = "openai") -> EntidadesTecnicas:
     """
-    Función asíncrona principal requerida.
-    Ejecuta la cadena usando .ainvoke() e incluye logs del proceso.
+    Función asíncrona principal requerida. Ejecuta la cadena usando .ainvoke() e incluye logs del proceso.
     """
     chain = build_chain(provider)
     logger.info(f"[{provider.upper()}] Ejecutando cadena asíncrona mediante .ainvoke() ({len(text)} caracteres)...")
