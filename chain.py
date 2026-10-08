@@ -21,13 +21,13 @@ prompt = ChatPromptTemplate.from_messages([
      "Sos un ingeniero especialista en arquitectura de software y análisis de logs. "
      "Tu tarea es analizar el texto provisto y extraer las entidades técnicas con precisión. "
      "Identificá tecnologías mencionadas, evaluá la criticidad (baja, media, alta) "
-     "y genera un resumen técnico breve."),
+     "y genera un resumen técnico breve, maximo de 600 caracteres."),
     ("human", "{texto}")
 ])
 
 
 def get_model(provider: str = "openai"):
-    """Fábrica para instanciar el cliente con temperature=0 para extracción determinista."""
+    """Fabrica para instanciar el cliente con temperature=0 para extracción determinista."""
     if provider == "openai":
         return ChatOpenAI(model="gpt-4o-mini", temperature=0)
     elif provider == "anthropic":
@@ -38,7 +38,7 @@ def get_model(provider: str = "openai"):
 
 def build_chain(provider: str = "openai"):
     """
-    Construye la Cadena LCEL: prompt | model.with_structured_output(Schema) + .with_retry()
+    Construye Cadena LCEL: prompt | model.with_structured_output(Schema) + .with_retry()
     """
     model = get_model(provider)
     
@@ -62,8 +62,8 @@ async def process_text(text: str, provider: str = "openai") -> EntidadesTecnicas
 
     try:
         resultado = await chain.ainvoke({"texto": text})
-        logger.info(f"[{provider.upper()}] ✅ Validación Pydantic exitosa.")
+        logger.info(f"[{provider.upper()}] Validación Pydantic exitosa.")
         return resultado
     except Exception as e:
-        logger.error(f"[{provider.upper()}] ❌ Falló tras agotar reintentos (.with_retry): {e}")
+        logger.error(f"[{provider.upper()}] Falló tras agotar reintentos (.with_retry): {e}")
         raise
